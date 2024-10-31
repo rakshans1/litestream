@@ -34,10 +34,7 @@ defmodule Litestream do
   def start_link(opts) do
     state = %{
       repo: Keyword.fetch!(opts, :repo),
-      replica_url: Keyword.fetch!(opts, :replica_url),
-      access_key_id: Keyword.fetch!(opts, :access_key_id),
-      secret_access_key: Keyword.fetch!(opts, :secret_access_key),
-      endpoint: Keyword.fetch!(opts, :endpoint),
+      config: Keyword.fetch!(opts, :replica_url),
       bin_path: Keyword.get(opts, :bin_path, :download),
       version: Keyword.get(opts, :version, Downloader.default_version())
     }
@@ -119,16 +116,9 @@ defmodule Litestream do
   def handle_continue(:start_litestream, state) do
     {:ok, port_pid, os_pid} =
       :exec.run_link(
-        "#{state.bin_path} replicate #{state.database} #{state.replica_url}",
+        "#{state.bin_path} replicate -config #{state.config} #{state.database} #{state.replica_url}",
         [
           :monitor,
-          {:env,
-           [
-             :clear,
-             {"LITESTREAM_ACCESS_KEY_ID", state.access_key_id},
-             {"LITESTREAM_SECRET_ACCESS_KEY", state.secret_access_key},
-             {"LITESTREAM_ENDPOINT", state.endpoint}
-           ]},
           {:kill_timeout, 10},
           :stdout,
           :stderr
