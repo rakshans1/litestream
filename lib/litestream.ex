@@ -24,9 +24,7 @@ defmodule Litestream do
   expects a Keyword list with the following options:
 
   * `:repo` - The Ecto Repo that manages the SQLite database. REQUIRED
-  * `:replica_url` - The URL to which the SQLite database should be backed up. REQUIRED
-  * `:access_key_id` - The access key ID to the provided `:replica_url`. REQUIRED
-  * `:secret_access_key` - The secret access key to the provided `:replica_url`. REQUIRED
+  * `:config` - config file path REQUIRED
   * `:name` - The name of the GenServer process. By default it is `Litestream`. OPTIONAL
   * `:bin_path` - If you already have access to the Litestream binary, provide the path via this
                   option so that you can skip the download step. OPTIONAL
@@ -116,7 +114,7 @@ defmodule Litestream do
   def handle_continue(:start_litestream, state) do
     {:ok, port_pid, os_pid} =
       :exec.run_link(
-        "#{state.bin_path} replicate -config #{state.config} #{state.database} #{state.replica_url}",
+        "#{state.bin_path} replicate -config #{state.config}",
         [
           :monitor,
           {:kill_timeout, 10},
