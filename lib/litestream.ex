@@ -37,6 +37,7 @@ defmodule Litestream do
       replica_url: Keyword.fetch!(opts, :replica_url),
       access_key_id: Keyword.fetch!(opts, :access_key_id),
       secret_access_key: Keyword.fetch!(opts, :secret_access_key),
+      endpoint: Keyword.fetch!(opts, :endpoint),
       bin_path: Keyword.get(opts, :bin_path, :download),
       version: Keyword.get(opts, :version, Downloader.default_version())
     }
@@ -125,7 +126,8 @@ defmodule Litestream do
            [
              :clear,
              {"LITESTREAM_ACCESS_KEY_ID", state.access_key_id},
-             {"LITESTREAM_SECRET_ACCESS_KEY", state.secret_access_key}
+             {"LITESTREAM_SECRET_ACCESS_KEY", state.secret_access_key},
+             {"LITESTREAM_ENDPOINT", state.endpoint}
            ]},
           {:kill_timeout, 10},
           :stdout,
