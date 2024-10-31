@@ -34,7 +34,7 @@ defmodule Litestream do
   def start_link(opts) do
     state = %{
       repo: Keyword.fetch!(opts, :repo),
-      config: Keyword.fetch!(opts, :replica_url),
+      config: Keyword.fetch!(opts, :config),
       bin_path: Keyword.get(opts, :bin_path, :download),
       version: Keyword.get(opts, :version, Downloader.default_version())
     }
